@@ -32,6 +32,12 @@ const PackageDetails = ({ packageName, index }) => {
       register(`${package_}.impression`, { required: true });
 
     });
+  
+  const units = [
+    { key: '1', text: 'mg', value: 'mg' },
+    { key: '2', text: 'ng/mL', value: 'ng' },
+    { key: '3', text: 'μmol/L', value: 'mumol' },
+  ]
 
 
   const Level1aContent = (
@@ -61,23 +67,24 @@ const PackageDetails = ({ packageName, index }) => {
         name={`${package_}.MaxValue`}
         placeholder='Enter is Nabl...'
         onChange={handleInputChange} />
-      <Form.Input
+      <Form.Select
         fluid
+        options={ units}
         label='Unit'
         name={`${package_}.unit`}
-        placeholder='Enter is Nabl...'
+        placeholder='Enter units...'
         onChange={handleInputChange} />
       <Form.Input
         fluid
         label='Method'
         name={`${package_}.method`}
-        placeholder='Enter is Nabl...'
+        placeholder='Enter method...'
         onChange={handleInputChange} />
       <Form.Input
         fluid
         label='Impression'
         name={`${package_}.impression`}
-        placeholder='Enter is Nabl...'
+        placeholder='Enter impression...'
         onChange={handleInputChange} />
 
     </div>
