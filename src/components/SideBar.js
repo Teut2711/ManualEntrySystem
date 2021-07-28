@@ -1,12 +1,11 @@
-import {  useContext } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
-import { Header, Icon, Image, Menu, Segment, Sidebar } from "semantic-ui-react";
 import { Context } from "../App";
 
 export default (function () {
-  
-  const { patientTestPackages, handleMainContent } = useContext(Context);
 
+  const { patientPackages, setFormView } = useContext(Context);
+ 
   return (
     <>
       <fieldset>
@@ -14,8 +13,7 @@ export default (function () {
           <h2>User Details</h2>
         </legend>
         <div>
-          { /* logic unclear for using bind */}
-          <div onClick={()=>handleMainContent("profile")}>Profile</div>
+          <div onClick={() => setFormView({ name: "profile", index: null })}>Profile</div>
         </div>
       </fieldset>
       <fieldset>
@@ -23,13 +21,19 @@ export default (function () {
           <h2>Tests</h2>
         </legend>
         <div>
-          {patientTestPackages.map((test, index) => {
-          
-            return <div key={index.toString()} onClick={ ()=>handleMainContent(test)} >
-          
-              {test}
+          {
+            patientPackages.map(
+              (package_, index) => {
+                console.log(package_)
+                return <div
+                  key={index.toString()}
+                  onClick={
+                    setFormView({name:package_, index:index})
+                  }
+                >
+              {package_}
             </div>
-          
+
           })}
         </div>
       </fieldset>

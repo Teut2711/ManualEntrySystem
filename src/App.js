@@ -12,20 +12,13 @@ export const Context = createContext();
 
 function App() {
   
-  const [patientTestPackages, setPatientTestPackages] = useState([]);
+  const [patientPackages, setPatientPackages] = useState([]);
 
-  const [mainContent, setMainContent] = useState("profile");
-
-  const handleMainContent = (mainContent) => {
-    setMainContent(mainContent);
-  }
-
-  const handleSideBarPackageList  = (newPackage) => {
-    setPatientTestPackages(state => [...state, newPackage]);
-  }
+  const [formview, setFormView] = useState({ name: "profile", index: null });
+  
 
   return (
-    <Context.Provider value={{ patientTestPackages, handleSideBarPackageList , mainContent, handleMainContent }}>
+    <Context.Provider value={{  patientPackages, setPatientPackages , formview, setFormView }}>
       <Container >
         <Grid columns={2} divided>
           <Grid.Row>

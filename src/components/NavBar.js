@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { BiSearchAlt2 } from "react-icons/bi";
 import LogoImg from "../static/niroggyan-logo-wide.png";
 import { Input } from 'semantic-ui-react'
 
