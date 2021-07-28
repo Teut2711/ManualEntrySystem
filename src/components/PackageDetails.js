@@ -29,7 +29,7 @@ const PackageDetails = ({ packageName, index }) => {
     <fieldset>
       <legend>
         <h1>Package Details</h1>
-        <h1>{package_}</h1>
+        <h1>{packageName}</h1>
 
       </legend>
 
@@ -41,32 +41,32 @@ const PackageDetails = ({ packageName, index }) => {
                 <li>{profile.text}</li>
                 <Form.Input
                   fluid
-                  label='Name'
+                  label='Sample Type'
                   name={`${package_}.sampleType`}
-                  placeholder='Enter name'
+                  placeholder='Enter sample type...'
                   onChange={handleInputChange} />
 
                 <Form.Input
                   fluid
-                  label='Name'
+                  label='Sample Collection Date'
                   name={`${package_}.sampleCollectionDate`}
-                  placeholder='Enter name'
+                  placeholder='Enter sample collection date...'
                   onChange={handleInputChange} />
                 <Form.Input
                   fluid
-                  label='Name'
+                  label='Sample Received Date'
                   name={`${package_}.sampleReceivedDate`}
-                  placeholder='Enter name'
+                  placeholder='Enter sample received date...'
                   onChange={handleInputChange} /><Form.Input
                   fluid
-                  label='Name'
+                  label='Approval Date'
                   name={`${package_}.approvalDate`}
-                  placeholder='Enter name'
+                  placeholder='Enter approval date'
                   onChange={handleInputChange} /><Form.Input
                   fluid
-                  label='Name'
+                  label='Is Nabl'
                   name={`${package_}.isNabl`}
-                  placeholder='Enter name'
+                  placeholder='Enter is Nabl...'
                   onChange={handleInputChange} />
               </>
             })

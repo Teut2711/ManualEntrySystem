@@ -149,7 +149,7 @@ const PatientTestResults = () => {
   ]
 
 
-  const addPackage = () => setPatientPackages(state => [...state, getValues("profile.packageSelector")])
+  const addPackage = () => setPatientPackages(state => [...state, getValues("patient.packageSelector")])
 
   const removePackage = (index) => setPatientPackages(state => state.filter((_, i) => i !== index));
 

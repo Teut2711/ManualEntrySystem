@@ -1,0 +1,121 @@
+{
+  "LabNo": "MED004.119657",
+  "PName": "DUMMYP",
+  "Gender": "Male",
+  "Age": "34",
+  "ReferredBy": "Self",
+  "results": [
+    {
+      "Profile_name": "LIPID PROFILE",
+      "investigation": [
+        {
+          "test_name": "LIPID PROFILE",
+          "SampleType": "SERUM",
+          "SampleCollDate": "14-07-2021 10:07:00",
+          "SampleRcvDate": "14-07-2021 16:07:09",
+          "ApprovalDate": "14-07-2021 16:07:05",
+          "IsNabl": "0",
+          "observations": [
+            {
+              "name": "TRIGLYCERIDES",
+              "observation_time": "14-07-2021 16:07:07",
+              "value": "150",
+              "MinValue": "50",
+              "MaxValue": "149",
+              "unit": "mg/dL",
+              "method": "Enzymatic",
+              "impression": "High"
+            },
+            {
+              "name": "NON-HDL CHOLESTEROL",
+              "observation_time": "14-07-2021 16:07:07",
+              "value": "144",
+              "MinValue": "0",
+              "MaxValue": "130",
+              "unit": "mg/dl",
+              "method": "Calculated",
+              "impression": "High"
+            },
+            {
+              "name": "TOTAL CHOLESTEROL",
+              "observation_time": "14-07-2021 16:07:04",
+              "value": "200",
+              "MinValue": "50",
+              "MaxValue": "199",
+              "unit": "mg/dL",
+              "method": "CHE/CHO/POD",
+              "impression": "High"
+            },
+            {
+              "name": "HDL CHOLESTEROL",
+              "observation_time": "14-07-2021 16:07:07",
+              "value": "56",
+              "MinValue": "39",
+              "MaxValue": "60",
+              "unit": "mg/dL",
+              "method": "CHE/CHO/POD",
+              "impression": "Normal"
+            },
+            {
+              "name": "LDL CHOLESTEROL",
+              "observation_time": "14-07-2021 16:07:07",
+              "value": "114",
+              "MinValue": "0",
+              "MaxValue": "100",
+              "unit": "mg/dL",
+              "method": "Calculated",
+              "impression": "High"
+            },
+            {
+              "name": "VLDL CHOLESTEROL",
+              "observation_time": "14-07-2021 16:07:07",
+              "value": "30",
+              "MinValue": "5",
+              "MaxValue": "30",
+              "unit": "mg/dL",
+              "method": "Calculated",
+              "impression": "Normal"
+            },
+            {
+              "name": "CHOL / HDL RATIO",
+              "observation_time": "14-07-2021 16:07:07",
+              "value": "3.57",
+              "MinValue": "0",
+              "MaxValue": "4.97",
+              "unit": "Ratio",
+              "method": "Calculated",
+              "impression": "Normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Profile_name": "GLUCOSE, FASTING",
+      "Package_book_code": "BIO101",
+      "investigation": [
+        {
+          "test_name": "GLUCOSE, FASTING",
+          "SampleType": "NAF PLASMA",
+          "SampleCollDate": "14-07-2021 11:07:00",
+          "SampleRcvDate": "14-07-2021 18:07:09",
+          "ApprovalDate": "14-07-2021 18:07:28",
+          "IsNabl": "1",
+          "observations": [
+            {
+              "name": "GLUCOSE, FASTING",
+              "observation_time": "14-07-2021 18:07:28",
+              "id": "7",
+              "value": "340",
+              "MinValue": "70",
+              "MaxValue": "100",
+              "unit": "mg/dL",
+              "method": "GOD - POD",
+              "impression": "High"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

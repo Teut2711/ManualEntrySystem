@@ -28,7 +28,7 @@ export default (function () {
                 return <div
                   key={index.toString()}
                   onClick={
-                    setFormView({name:package_, index:index})
+                    ()=>setFormView({name:package_, index:index})
                   }
                 >
               {package_}
