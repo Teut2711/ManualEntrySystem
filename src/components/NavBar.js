@@ -1,46 +1,33 @@
-import styled from "styled-components";
-import LogoImg from "../static/niroggyan-logo-wide.png";
-import { Input } from 'semantic-ui-react'
+import React, { createRef, useState } from 'react';
+import { Input, Menu, Segment, Navbar, Button } from 'semantic-ui-react'
+import Modal from "./Modal";
 
+const NavBar = () => {
+    const [activeItem, setActiveItem] = useState('home')
+    const handleItemClick = (e, { name }) => setActiveItem(name);
+    return (
+        <Menu style={{ width: "100%" }}>
+            <Menu.Item
+                name='home'
+                active={activeItem === 'home'}
+                onClick={handleItemClick}
+            />
+            <Menu.Item
+                name='login'
+                active={activeItem === 'login'}
+                onClick={handleItemClick}
+            />
 
-const Logo = styled.div``;
+            <Menu.Menu position='right'>
+                <Menu.Item>
+                    <Input icon='search' placeholder='Search...' />
+                </Menu.Item>
+                <Menu.Item>
+                    <Modal />
+                </Menu.Item>
+            </Menu.Menu>
 
-
-const NavBar = styled.nav`
-  grid-column: 1/6;
-  border-radius: 2%;
-  display: flex;
-  justify-content: space-between;
-  margin-right: 10%;
-`;
-
-
-
-export const SearchBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #146342;
-  font-weight: bold;
-  @import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap");
-  label {
-    margin-right: 10px;
-    font-size: large;
-    font-family: "Inconsolata", sans-serif;
-  }
-  input {
-    border-radius: 20px;
-    height: 25px;
-    width: 400px;
-  }
-`;
-
-export default (function() {
-  return (<NavBar>
-    <Logo>
-      <img src={LogoImg} alt="Logo" width={200} />
-    </Logo>
-    <Input focus placeholder='Search...' />
-  </NavBar>)
-
-});
+        </Menu>
+    )
+}
+export default NavBar;

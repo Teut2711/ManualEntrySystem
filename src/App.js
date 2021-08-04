@@ -1,35 +1,46 @@
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 import NavBar from "./components/NavBar";
-import SideBar from "./components/SideBar";
 import Main from "./components/Main";
-import { createContext, useState } from "react";
-import { Container, Grid } from 'semantic-ui-react'
-
-
+import { createContext, useEffect, useState } from "react";
+import { Container, Grid } from 'semantic-ui-react';
+import details from "./patientDetails"
+import tests from "./patientTests";
 export const Context = createContext();
 
 
+
+
+
 function App() {
-  
+
+  // const details = async () => JSON.parse(await fs.readFile('patientDetails.json', 'utf8'));
+  // const tests = async () => JSON.parse(await fs.readFile('patientTests.json', 'utf8'));
+
+
+
   const [patientPackages, setPatientPackages] = useState([]);
 
   const [formview, setFormView] = useState({ name: "profile", index: null });
-  
+  const [appState, setAppState] = useState({
+    patient: {
+      details: details,
+      tests: tests
+    },
+  }
+  );
+
 
   return (
-    <Context.Provider value={{  patientPackages, setPatientPackages , formview, setFormView }}>
-      <Container >
-        <Grid columns={2} divided>
-          <Grid.Row>
-            <NavBar />
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column width={4}>  <SideBar />  </Grid.Column>
-            <Grid.Column width={12}>  <Main /> </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
+    <Context.Provider value={{ appState, setAppState, patientPackages, setPatientPackages, formview, setFormView }}>
+      <Grid columns={2} divided>
+        <Grid.Row>
+          <NavBar />
+        </Grid.Row>
+        <Grid.Row>
+          <Main />
+        </Grid.Row>
+      </Grid>
     </Context.Provider>
   );
 }
