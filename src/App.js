@@ -2,8 +2,8 @@ import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import Main from "./components/Main";
-import { createContext, useEffect, useState } from "react";
-import { Container, Grid } from 'semantic-ui-react';
+import { createContext, useState } from "react";
+import {  Grid } from 'semantic-ui-react';
 import details from "./patientDetails"
 import tests from "./patientTests";
 export const Context = createContext();
@@ -14,8 +14,6 @@ export const Context = createContext();
 
 function App() {
 
-  // const details = async () => JSON.parse(await fs.readFile('patientDetails.json', 'utf8'));
-  // const tests = async () => JSON.parse(await fs.readFile('patientTests.json', 'utf8'));
 
 
 

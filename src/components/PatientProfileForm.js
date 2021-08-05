@@ -1,45 +1,23 @@
-import React, { useContext, useEffect } from "react";
-import {
-  Icon,
-  Button,
-  Form,
-  Message,
-  Divider,
-  Modal,
-  Input,
-  Select,
-} from "semantic-ui-react";
+import React, { useState, useContext, useEffect } from "react";
+import { Icon, Button, Form, Message, Modal, Input, Select } from "semantic-ui-react";
 import { Context } from "../App";
 import { useFormContext } from "react-hook-form";
-
-function getControl(type) {
-  switch (type) {
-    case "select":
-      return Select;
-    default:
-      return Input;
-  }
-};
-
-
+import { TestContext } from "./Main";
 
 
 
 
 const PatientDetails = () => {
-  const { register, setValue } = useFormContext();
+
+  const { register, handleInputChange } = useFormContext();
   const { appState } = useContext(Context);
 
-  const handleInputChange = (e, { name, value }) => {
-    setValue(name, value);
-  };
 
-  const snakeCase = string => {
-    return string.replace(/\W+/g, " ")
-      .split(/ |\B(?=[A-Z])/)
-      .map(word => word.toLowerCase())
-      .join('_');
-  };
+  useEffect(() => {
+    for (const v in Object.values(appState.patient.details)) {
+      register(`patient.${v.name}`, { required: true });
+    }
+  });
 
 
   return <>
@@ -63,60 +41,22 @@ const PatientDetails = () => {
         </Form.Group>
       );
     })}
+    <AddTestButton />
+    <Button color="violet">Submit</Button>
+
   </>
 
 
 }
+export default PatientDetails;
 
 
-export const TestDetails = ({ testList, setTestList, counter, setCounter }) => {
-  const { register, unregister, setValue, getValues } = useFormContext();
+export const TestDetails = () => {
+  const { handleInputChange } = useFormContext();
   const { appState } = useContext(Context);
-
-  const handleInputChange = (e, { name, value }) => {
-    setValue(name, value);
-  };
-
-  const snakeCase = string => {
-    return string.replace(/\W+/g, " ")
-      .split(/ |\B(?=[A-Z])/)
-      .map(word => word.toLowerCase())
-      .join('_');
-  };
-
-  const handleTestAddition = () => {
-    setCounter((state) => state + 1);
-
-    setTestList(state => {
-      const newState = {
-        text: getValues(`patient.tests.${counter}.name`, "value"),
-        id: getValues(`patient.tests.${counter}.name`, "id")
-      }
-      newState.name = snakeCase(newState.text.toLowerCase())
-      return [...state, newState]
-    })
-  }
-
-
-  const handleTestFieldsUnregistration = () => {
-    unregister(`patient.tests.${counter}`);
-  }
-
-
-  useEffect(() => {
-    for (const v in Object.values(appState.patient.details)) {
-      register(`patient.${v.name}`, { required: true });
-    }
-  });
-
+  const { counter } = useContext(TestContext)
 
   return <>
-    <Message
-      attached
-      header="Add a test"
-      content="Fill out the test details."
-    />
-
     {
       Object.values(appState.patient.tests).map((props, index) => {
         const fieldProps = {
@@ -137,19 +77,102 @@ export const TestDetails = ({ testList, setTestList, counter, setCounter }) => {
         );
       })
     }
-    <Button
-      color="green"
-      onClick={handleTestAddition}>
-      OK
-    </Button>
-
-    <Button
-      color="black"
-      onClick={handleTestFieldsUnregistration}
-    >
-      Cancel
-    </Button>
 
   </>
 }
-export default PatientDetails;
+
+const AddTestButton = () => {
+
+  const { unregister, getValues, register } = useFormContext();
+  const { counter, setCounter, setTestList } = useContext(TestContext)
+  const [open, setOpen] = useState(false);
+  const { appState } = useContext(Context);
+
+  const handleTestAdditionAccept = () => {
+    setTestList(state => {
+      let newItem = {
+        [counter]: {
+          text: getValues(`patient.tests.${counter}.name`, "value"),
+        }
+
+      }
+      const newState = { ...state, ...newItem }
+
+      setCounter(state => state + 1);
+      setOpen(false);
+
+      return newState;
+
+    })
+
+  }
+
+
+  const handleTestAddition = () => {
+    for (const v in Object.values(appState.patient.tests)) {
+      register(`patient.tests.${counter}.${v.name}`, { required: true });
+    }
+  }
+
+  const handleTestAdditionCancel = () => {
+    unregister(`patient.tests.${counter}`);
+    setOpen(false);
+  }
+
+  return <Modal onOpen={() => setOpen(true)}
+    open={open}
+    trigger={
+      <Button positive onClick={handleTestAddition}>
+        Add Test
+        <span>
+          <Icon name="plus circle" />
+        </span>
+      </Button>
+    }>
+    <Modal.Header>
+      <Message
+        attached
+        header="Add a test"
+        content="Fill out the test details."
+      />
+    </Modal.Header>
+    <Modal.Content>
+      <TestDetails />
+    </Modal.Content>
+    <Modal.Actions>
+      <Button
+        color="green"
+        onClick={handleTestAdditionAccept}
+      >
+        OK
+      </Button>
+      <Button
+        color="black"
+        onClick={handleTestAdditionCancel}
+      >
+        Cancel
+      </Button>
+    </Modal.Actions>
+  </Modal>
+
+
+}
+
+
+const getControl = (type) => {
+  switch (type) {
+    case "select":
+      return Select;
+    default:
+      return Input;
+  }
+};
+
+// const snakeCase = string => {
+//   return string.replace(/\W+/g, " ")
+//     .split(/ |\B(?=[A-Z])/)
+//     .map(word => word.toLowerCase())
+//     .join('_');
+// };
+
+

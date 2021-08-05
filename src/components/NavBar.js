@@ -1,5 +1,5 @@
-import React, { createRef, useState } from 'react';
-import { Input, Menu, Segment, Navbar, Button } from 'semantic-ui-react'
+import React, {  useState } from 'react';
+import { Input, Menu } from 'semantic-ui-react'
 import Modal from "./Modal";
 
 const NavBar = () => {
