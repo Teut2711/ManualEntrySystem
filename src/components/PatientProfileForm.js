@@ -5,8 +5,6 @@ import { useFormContext } from "react-hook-form";
 import { TestContext } from "./Main";
 
 
-
-
 const PatientDetails = () => {
 
   const { register, handleInputChange } = useFormContext();
@@ -21,12 +19,7 @@ const PatientDetails = () => {
 
 
   return <>
-    <Message
-      attached
-      header="Patient Details"
-      content="Fill out the patient details."
-    />
-
+    
     {Object.values(appState.patient.details).map((props, index) => {
       let fieldProps = { ...props, name: `patient.${props.name}` };
       fieldProps.id = fieldProps.name;
@@ -41,14 +34,14 @@ const PatientDetails = () => {
         </Form.Group>
       );
     })}
-    <AddTestButton />
-    <Button color="violet">Submit</Button>
 
   </>
 
 
 }
 export default PatientDetails;
+
+
 
 
 export const TestDetails = () => {
@@ -63,11 +56,10 @@ export const TestDetails = () => {
           ...props,
           name: `patient.tests.${counter}.${props.name}`,
         };
-        fieldProps.id = fieldProps.name;
-
+     
         return (
           <Form.Group key={index.toString()} widths="equal">
-            <Form.Input
+            <Form.Field
               fluid
               control={getControl(props.type)}
               {...fieldProps}
@@ -81,7 +73,7 @@ export const TestDetails = () => {
   </>
 }
 
-const AddTestButton = () => {
+export const AddTestButton = () => {
 
   const { unregister, getValues, register } = useFormContext();
   const { counter, setCounter, setTestList } = useContext(TestContext)
@@ -167,12 +159,3 @@ const getControl = (type) => {
       return Input;
   }
 };
-
-// const snakeCase = string => {
-//   return string.replace(/\W+/g, " ")
-//     .split(/ |\B(?=[A-Z])/)
-//     .map(word => word.toLowerCase())
-//     .join('_');
-// };
-
-
