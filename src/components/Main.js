@@ -5,6 +5,7 @@ import { Tab } from 'semantic-ui-react'
 import { Button, Form, Message } from "semantic-ui-react";
 import { useForm, FormProvider } from "react-hook-form";
 import { AddTestButton } from "./PatientProfileForm";
+import { ResetButton } from "formik-semantic-ui-react";
 
 export const TestContext = createContext();
 
@@ -12,11 +13,12 @@ const Main = () => {
   const [testList, setTestList] = useState({});
   const methods = useForm();
   const [counter, setCounter] = useState(0);
- 
+  const [formStore, setFormStore] = useState({})
+
+
   const handleInputChange = (e, { name, value }) => {
     methods.setValue(name, value);
     setFormStore(state => {
-      console.log(state);
       if (!(name in state))
         throw new Error("Some weird error. Key not initialised but updating");
       return { ...state, [name]: value }
@@ -24,26 +26,25 @@ const Main = () => {
     )
   };
 
-  const [formStore, setFormStore] = useState({})
-
 
 
 
 
   const allTests = Object.keys(testList).map(key => {
-
     return {
       menuItem: testList[key].text,
-      render: () => <Tab.Pane >
-        <Message
-          attached
-          header="Test Details"
-          content="Fill out the test details."
-        />
-        <TestDetails />
-        <AddTestButton />
-        <Button color="violet">Submit</Button>
-      </Tab.Pane>
+      render: () => {
+        return <Tab.Pane >
+          <Message
+            attached
+            header="Test Details"
+            content="Fill out the test details."
+          />
+          <TestDetails />
+          <AddTestButton />
+          <Button color="violet">Submit</Button>
+        </Tab.Pane>
+      }
     }
   })
 
@@ -60,6 +61,16 @@ const Main = () => {
       <Button color="violet">Submit</Button>
     </Tab.Pane>
   }
+
+
+  const handleTabChange = () => {
+    for (const [key, val] in Object.entries(formStore)) {
+
+      methods.setValue(key, val)
+    }
+    console.log(methods.getValues())
+  }
+
   const menuItems = [details, ...allTests]
 
   return (
@@ -67,9 +78,9 @@ const Main = () => {
       <FormProvider {...{ ...methods, handleInputChange, formStore, setFormStore }}  >
         <TestContext.Provider value={{ counter, setCounter, setTestList }}>
 
-          <Form className="attached fluid segment" >
+          <Form className="attached fluid segment" onSubmit={event => event.preventDefault()}>
 
-            <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={menuItems} />
+            <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={menuItems} onTabChange={handleTabChange} />
 
           </Form>
         </TestContext.Provider>

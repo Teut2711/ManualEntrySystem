@@ -6,7 +6,7 @@ import { TestContext } from "./Main";
 
 
 const PatientDetails = () => {
-  const { register, handleInputChange, getValues, formStore, setFormStore, setValue } = useFormContext();
+  const { reset, register, handleInputChange, setFormStore, setValue } = useFormContext();
   const { appState } = useContext(Context);
 
 
@@ -21,32 +21,33 @@ const PatientDetails = () => {
         if (!(name in newState)) {
           newState[name] = "";
           setValue(name, "")
+          reset({ [name]: "" });
         }
-        else
-          setValue(name, newState[name])
         return newState;
       })
     }
-  }, [appState.patient.details, register, setFormStore, setValue]);
+  }, [appState.patient.details, register, setFormStore, setValue, reset]);
 
 
   return <>
-    {Object.values(appState.patient.details).map((props, index) => {
-      let fieldProps = { ...props, name: `patient.${props.name}` };
-      fieldProps.id = fieldProps.name;
+    {
+      Object.values(appState.patient.details).map((props, index) => {
+        let fieldProps = { ...props, name: `patient.${props.name}` };
+        fieldProps.id = fieldProps.name;
 
 
-      return (
-        <Form.Group key={index.toString()} widths="equal">
-          <Form.Field
-            fluid
-            control={getControl(props.type)}
-            {...fieldProps}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-      );
-    })}
+
+        return (
+          <Form.Group key={index.toString()} widths="equal">
+            <Form.Field
+              fluid
+              control={getControl(props.type)}
+              {...fieldProps}
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+        );
+      })}
 
   </>
 
@@ -128,8 +129,6 @@ export const AddTestButton = () => {
           newState[name] = "";
           setValue(name, "")
         }
-        else
-          setValue(name, newState[name])
         return newState;
       })
     }
