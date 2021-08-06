@@ -5,7 +5,7 @@ import Main from "./components/Main";
 import { createContext, useState } from "react";
 import {  Grid } from 'semantic-ui-react';
 import details from "./patientDetails"
-import tests from "./patientTests";
+import testTemplate from "./patientTests";
 export const Context = createContext();
 
 
@@ -23,7 +23,7 @@ function App() {
   const [appState, setAppState] = useState({
     patient: {
       details: details,
-      tests: tests
+      tests: testTemplate
     },
   }
   );

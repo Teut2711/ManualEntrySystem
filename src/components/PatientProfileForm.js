@@ -6,23 +6,36 @@ import { TestContext } from "./Main";
 
 
 const PatientDetails = () => {
-
-  const { register, handleInputChange } = useFormContext();
+  const { register, handleInputChange, getValues, formStore, setFormStore, setValue } = useFormContext();
   const { appState } = useContext(Context);
 
 
   useEffect(() => {
-    for (const v in Object.values(appState.patient.details)) {
-      register(`patient.${v.name}`, { required: true });
+    for (const key in appState.patient.details) {
+      const name = "patient." + appState.patient.details[key].name;
+
+      register(name, { required: true });
+      setFormStore(state => {
+        let newState = { ...state };
+
+        if (!(name in newState)) {
+          newState[name] = "";
+          setValue(name, "")
+        }
+        else
+          setValue(name, newState[name])
+        return newState;
+      })
     }
-  });
+  }, [appState.patient.details, register, setFormStore, setValue]);
 
 
   return <>
-    
     {Object.values(appState.patient.details).map((props, index) => {
       let fieldProps = { ...props, name: `patient.${props.name}` };
       fieldProps.id = fieldProps.name;
+
+
       return (
         <Form.Group key={index.toString()} widths="equal">
           <Form.Field
@@ -56,7 +69,7 @@ export const TestDetails = () => {
           ...props,
           name: `patient.tests.${counter}.${props.name}`,
         };
-     
+
         return (
           <Form.Group key={index.toString()} widths="equal">
             <Form.Field
@@ -75,10 +88,11 @@ export const TestDetails = () => {
 
 export const AddTestButton = () => {
 
-  const { unregister, getValues, register } = useFormContext();
+  const { unregister, getValues, register, setValue, formStore, setFormStore } = useFormContext();
   const { counter, setCounter, setTestList } = useContext(TestContext)
   const [open, setOpen] = useState(false);
   const { appState } = useContext(Context);
+
 
   const handleTestAdditionAccept = () => {
     setTestList(state => {
@@ -101,8 +115,23 @@ export const AddTestButton = () => {
 
 
   const handleTestAddition = () => {
-    for (const v in Object.values(appState.patient.tests)) {
-      register(`patient.tests.${counter}.${v.name}`, { required: true });
+
+
+    for (const key in appState.patient.tests) {
+      const name = `patient.tests.${counter}.${appState.patient.tests[key].name}`
+      register(name, { required: true });
+
+      setFormStore(state => {
+        let newState = { ...state };
+
+        if (!(name in newState)) {
+          newState[name] = "";
+          setValue(name, "")
+        }
+        else
+          setValue(name, newState[name])
+        return newState;
+      })
     }
   }
 

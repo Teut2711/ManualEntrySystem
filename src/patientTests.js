@@ -1,4 +1,4 @@
-const tests = {
+const testTemplate = {
     "name": {
         "type": "text",
         "name": "name",
@@ -59,4 +59,4 @@ const tests = {
 }
 
 
-export default tests;
+export default testTemplate;

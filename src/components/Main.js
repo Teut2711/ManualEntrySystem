@@ -1,6 +1,6 @@
 import PatientDetails, { TestDetails } from "./PatientProfileForm";
 import { Grid } from 'semantic-ui-react';
-import { useState, createContext } from 'react';
+import { useState, createContext, useContext } from 'react';
 import { Tab } from 'semantic-ui-react'
 import { Button, Form, Message } from "semantic-ui-react";
 import { useForm, FormProvider } from "react-hook-form";
@@ -12,9 +12,19 @@ const Main = () => {
   const [testList, setTestList] = useState({});
   const methods = useForm();
   const [counter, setCounter] = useState(0);
+ 
   const handleInputChange = (e, { name, value }) => {
     methods.setValue(name, value);
+    setFormStore(state => {
+      console.log(state);
+      if (!(name in state))
+        throw new Error("Some weird error. Key not initialised but updating");
+      return { ...state, [name]: value }
+    }
+    )
   };
+
+  const [formStore, setFormStore] = useState({})
 
 
 
@@ -54,10 +64,10 @@ const Main = () => {
 
   return (
     <Grid.Column width={16}>
-      <FormProvider {...{ ...methods, handleInputChange }}  >
+      <FormProvider {...{ ...methods, handleInputChange, formStore, setFormStore }}  >
         <TestContext.Provider value={{ counter, setCounter, setTestList }}>
 
-          <Form className="attached fluid segment">
+          <Form className="attached fluid segment" >
 
             <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={menuItems} />
 
