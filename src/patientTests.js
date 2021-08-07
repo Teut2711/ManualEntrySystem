@@ -31,7 +31,8 @@ const testSpec = {
             "placeholder": "Enter value...",
         },
         validation: {
-            "required": true
+            "required": true,
+            "valueAsNumber": true
         }
     },
     "unit": {

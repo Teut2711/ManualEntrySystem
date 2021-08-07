@@ -10,21 +10,20 @@ const PatientDetails = () => {
   const { appState } = useContext(Context);
   return <>
     {
-      Object.values(appState.patient.detailsSpec).map((fieldDescription, index) => {
+      Object.values(appState.patient.detailsSpec).map(({ props, validation }, index) => {
 
-        let fieldProps = { ...fieldDescription.props, name: `patient.${fieldDescription.props.name}` };
+        let fieldProps = { ...props, name: `patient.${props.name}` };
         fieldProps.id = fieldProps.name;
-        fieldProps.defaultValue = getValues(fieldProps.name) || fieldDescription.props.defaultValue || "";
+        fieldProps.defaultValue = getValues(fieldProps.name) || props.defaultValue || "";
 
         return (
           <Form.Group key={index.toString()} widths="equal">
             <Form.Field
               fluid
-              control={getControl(fieldDescription.props.type)}
-              {...register(fieldProps.name, { ...fieldDescription.validation })}
+              control={getControl(fieldProps.type)}
+              {...register(fieldProps.name, { ...validation })}
               {...fieldProps}
               onChange={handleInputChange}
-
             />
           </Form.Group>
         );
@@ -45,19 +44,22 @@ export const TestDetails = ({ isModal = false, testID }) => {
 
   return <>
     {
-      Object.values(appState.patient.testSpec).map((fieldDescription, index) => {
-        let fieldProps = { ...fieldDescription, name: `patient.tests.${testID}.${fieldDescription.name}` };
+      
+      Object.values(appState.patient.testSpec).map(({ props, validation }, index) => {
+        let fieldProps = { ...props, name: `patient.tests.${testID}.${props.name}` };
         fieldProps.id = fieldProps.name;
+        console.log(fieldProps);
+
         if (!isModal)
-          fieldProps.defaultValue = getValues(fieldProps.name) || fieldDescription.props.defaultValue || "";
+          fieldProps.defaultValue = getValues(fieldProps.name) || fieldProps.defaultValue || "";
 
         return (
           <Form.Group key={index} widths="equal">
             <Form.Field
               fluid
-              control={getControl(fieldDescription.props.type)}
+              control={getControl(fieldProps.type)}
               {...fieldProps}
-              {...register(fieldProps.name, { ...fieldDescription.validation })}
+              {...register(fieldProps.name, { ...validation })}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -77,10 +79,14 @@ export const AddTestButton = () => {
   const testID = `test${counter}`;
 
   const handleTestAdditionAccept = () => {
+
     setTestList(state => {
+
       const newState = {
         ...state, [testID]: { text: getValues(`patient.tests.${testID}.name`) }
       }
+      
+      console.log(newState, testID)
 
       setCounter(state => state + 1);
       setOpen(false);

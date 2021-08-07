@@ -18,9 +18,11 @@ const Main = () => {
     methods.setValue(name, value);
   };
 
-  const handleTestDeletion = (event, { testId }) => {
-    setTestList(state => state.filter(ele => ele.id !== testId))
-    methods.unregister()
+  const handleTestDeletion = (event, { testID }) => {
+    console.log("Deletion")
+    setTestList(state => state.filter(ele => ele.id !== testID))
+    
+    methods.unregister(`patient.tests.${ testID }`)
   }
 
   const details = {
@@ -38,16 +40,17 @@ const Main = () => {
   }
 
 
-  const allTests = Object.keys(testList).map(key => {
+  const allTests = Object.keys(testList).map(testID => {
+    
     return {
-      menuItem: testList[key].text,
+      menuItem: testList[testID].text,
       render: () => <Tab.Pane >
         <Message
           attached
           header="Test Details"
           content="Fill out the test details."
         />
-        <TestDetails testID={key} />
+        <TestDetails testID={testID} />
         <AddTestButton />
         <Button color="red" onClick={handleTestDeletion}>Remove test</Button>
         <Button color="violet">Submit</Button>
@@ -62,7 +65,7 @@ const Main = () => {
     <Grid.Column width={16}>
       <FormProvider {...{ ...methods, handleInputChange }}  >
         <TestContext.Provider value={{ counter, setCounter, setTestList, handleTestDeletion }} >
-          <Form className="attached fluid segment" method="post" action={"http://localhost:8000"}>
+          <Form className="attached fluid segment" method="post" action={"http://localhost:8000"} onSubmit={ e=>e.preventDefault()}>
             <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={menuItems} />
           </Form>
         </TestContext.Provider>

@@ -52,7 +52,8 @@ const detailsSpec = {
 
         },
         validation: {
-            required: true
+            required: true,
+            valueAsNumber: true
         },
     },
     "referredBy": {
