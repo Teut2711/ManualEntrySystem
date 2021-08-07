@@ -1,11 +1,10 @@
-import PatientDetails, { TestDetails } from "./PatientProfileForm";
+import PatientDetails, { TestDetails } from "./FormComponents";
 import { Grid } from 'semantic-ui-react';
 import { useState, createContext } from 'react';
 import { Tab } from 'semantic-ui-react'
 import { Button, Form, Message } from "semantic-ui-react";
 import { useForm, FormProvider } from "react-hook-form";
-import { AddTestButton } from "./PatientProfileForm";
-import { ControlPointDuplicateOutlined } from "@material-ui/icons";
+import { AddTestButton } from "./FormComponents";
 
 
 export const TestContext = createContext();
@@ -32,9 +31,14 @@ const Main = () => {
 
   }
 
+  const handleTabChange = (e, { activeIndex }) => {
+    setCurrentTabIndex(activeIndex)
+    console.log(activeIndex)
+  }
+
   const details = {
     menuItem: 'Patient Profile',
-    render: () => <Tab.Pane>
+    render: () => <Tab.Pane key={ "Patient Profile"}>
       <Message
         attached
         header="Patient Details"
@@ -47,15 +51,12 @@ const Main = () => {
     </Tab.Pane>
   }
 
-  const handleTabChange = (e, { activeIndex }) => {
-    setCurrentTabIndex(activeIndex)
-    console.log(activeIndex)
-  }
+
   const allTests = Object.keys(testList).map(testID => {
-    
+
     return {
       menuItem: testList[testID].text,
-      render: () => <Tab.Pane>
+      render: () => <Tab.Pane key={testList[testID].text}>
         <Message
           attached
           header="Test Details"

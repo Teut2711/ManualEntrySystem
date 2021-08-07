@@ -12,10 +12,8 @@ const useGetFields = (fieldSpec, modifyName) => {
     let fieldProps = { ...props, name: modifyName(props.name) };
     fieldProps.id = fieldProps.name;
     fieldProps.defaultValue = getValues(fieldProps.name) || props.defaultValue || "";
-
     return fieldProps;
   }
-
 
 
   return Object.values(fieldSpec).map(({ props, validation }, index) => {
@@ -42,7 +40,8 @@ const PatientDetails = () => {
   const { appState } = useContext(Context);
   return useGetFields(
     appState.patient.detailsSpec,
-    name => `patient.${name}`)
+    name => `patient.${name}`
+  )
 
 }
 export default PatientDetails;
@@ -113,12 +112,14 @@ export const AddTestButton = () => {
     </Modal.Content>
     <Modal.Actions>
       <Button
+        key={0}
         color="green"
         onClick={handleTestAdditionAccept}
       >
         OK
       </Button>
       <Button
+        key={1}
         color="black"
         onClick={handleTestAdditionCancel}
       >
