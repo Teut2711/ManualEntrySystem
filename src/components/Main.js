@@ -5,6 +5,7 @@ import { Tab } from 'semantic-ui-react'
 import { Button, Form, Message } from "semantic-ui-react";
 import { useForm, FormProvider } from "react-hook-form";
 import { AddTestButton } from "./PatientProfileForm";
+import { ControlPointDuplicateOutlined } from "@material-ui/icons";
 
 
 export const TestContext = createContext();
@@ -13,16 +14,22 @@ const Main = () => {
   const [testList, setTestList] = useState({});
   const methods = useForm({ shouldUnregister: false });
   const [counter, setCounter] = useState(0);
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
   const handleInputChange = (e, { name, value }) => {
     methods.setValue(name, value);
   };
 
-  const handleTestDeletion = (event, { testID }) => {
-    console.log("Deletion")
-    setTestList(state => state.filter(ele => ele.id !== testID))
-    
-    methods.unregister(`patient.tests.${ testID }`)
+  const handleTestDeletion = (e, testID) => {
+    const filterDict = (dict, filterFunc) => Object.fromEntries(
+      Object.entries(dict).filter(filterFunc)
+    )
+
+    setTestList(state => filterDict(state, ([key, val]) => key !== testID))
+
+    methods.unregister(`patient.tests.${testID}`)
+    setCurrentTabIndex(0);
+
   }
 
   const details = {
@@ -32,6 +39,7 @@ const Main = () => {
         attached
         header="Patient Details"
         content="Fill out the patient details."
+
       />
       <PatientDetails />
       <AddTestButton />
@@ -39,12 +47,15 @@ const Main = () => {
     </Tab.Pane>
   }
 
-
+  const handleTabChange = (e, { activeIndex }) => {
+    setCurrentTabIndex(activeIndex)
+    console.log(activeIndex)
+  }
   const allTests = Object.keys(testList).map(testID => {
     
     return {
       menuItem: testList[testID].text,
-      render: () => <Tab.Pane >
+      render: () => <Tab.Pane>
         <Message
           attached
           header="Test Details"
@@ -52,7 +63,7 @@ const Main = () => {
         />
         <TestDetails testID={testID} />
         <AddTestButton />
-        <Button color="red" onClick={handleTestDeletion}>Remove test</Button>
+        <Button color="red" onClick={event => handleTestDeletion(event, testID)}>Remove test</Button>
         <Button color="violet">Submit</Button>
       </Tab.Pane>
     }
@@ -64,9 +75,13 @@ const Main = () => {
   return (
     <Grid.Column width={16}>
       <FormProvider {...{ ...methods, handleInputChange }}  >
-        <TestContext.Provider value={{ counter, setCounter, setTestList, handleTestDeletion }} >
-          <Form className="attached fluid segment" method="post" action={"http://localhost:8000"} onSubmit={ e=>e.preventDefault()}>
-            <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={menuItems} />
+        <TestContext.Provider value={{ counter, setCounter, testList, setTestList }} >
+          <Form className="attached fluid segment" method="post" action={"http://localhost:8000"} onSubmit={e => e.preventDefault()}>
+            <Tab menu={{ fluid: true, vertical: true, tabular: true }}
+              panes={menuItems}
+              defaultActiveIndex={0}
+              activeIndex={currentTabIndex}
+              onTabChange={handleTabChange} />
           </Form>
         </TestContext.Provider>
       </FormProvider>

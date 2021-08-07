@@ -50,35 +50,11 @@ export default PatientDetails;
 
 
 
-export const TestDetails = ({ isModal = false, testID }) => {
-  const { getValues, handleInputChange, register } = useFormContext();
+export const TestDetails = ({ testID }) => {
   const { appState } = useContext(Context);
+  return useGetFields(appState.patient.testSpec, name => `patient.tests.${testID}.${name}`)
 
-  return <>
-    {
 
-      Object.values(appState.patient.testSpec).map(({ props, validation }, index) => {
-        let fieldProps = { ...props, name: `patient.tests.${testID}.${props.name}` };
-        fieldProps.id = fieldProps.name;
-
-        if (!isModal)
-          fieldProps.defaultValue = getValues(fieldProps.name) || fieldProps.defaultValue || "";
-
-        return (
-          <Form.Group key={index} widths="equal">
-            <Form.Field
-              fluid
-              control={getControl(fieldProps.type)}
-              {...fieldProps}
-              {...register(fieldProps.name, { ...validation })}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-        );
-      })
-    }
-
-  </>
 }
 
 export const AddTestButton = () => {
@@ -89,6 +65,7 @@ export const AddTestButton = () => {
 
   const testID = `test${counter}`;
 
+
   const handleTestAdditionAccept = () => {
 
     setTestList(state => {
@@ -97,11 +74,10 @@ export const AddTestButton = () => {
         ...state, [testID]: { text: getValues(`patient.tests.${testID}.name`) }
       }
 
-      console.log(newState, testID)
 
       setCounter(state => state + 1);
       setOpen(false);
-
+      console.log(getValues("patient.tests"));
       return newState;
 
     })
@@ -133,7 +109,7 @@ export const AddTestButton = () => {
       />
     </Modal.Header>
     <Modal.Content>
-      <TestDetails isModal={true} testID={testID} />
+      <TestDetails testID={testID} />
     </Modal.Content>
     <Modal.Actions>
       <Button
