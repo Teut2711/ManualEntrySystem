@@ -1,50 +1,72 @@
-const details = {
+const detailsSpec = {
+
     "name": {
-        "type": "text",
-        "name": "name",
-        "label": "Name",
-        "placeholder": "Enter name...",
-        "required": true
+        props: {
+            "type": "text",
+            "name": "name",
+            "label": "Name",
+            "placeholder": "Enter name...",
+            "defaultValue": ""
+        },
+        validation: {
+            required: true
+        },
     },
     "gender": {
-        "type": "select",
-        "name": "gender",
-        "label": "Gender",
-        "placeholder": "Enter gender...",
-        "required": true,
-        "options": [
-            {
-                "key": "m",
-                "text": "Male",
-                "value": "male"
-            },
-            {
-                "key": "f",
-                "text": "Female",
-                "value": "female"
-            },
-            {
-                "key": "o",
-                "text": "Other",
-                "value": "other"
-            }
-        ]
+        props: {
+            "type": "select",
+            "name": "gender",
+            "label": "Gender",
+            "placeholder": "Enter gender...",
+            "defaultValue": "male",
+            "options": [
+                {
+                    "key": "m",
+                    "text": "Male",
+                    "value": "male"
+                },
+                {
+                    "key": "f",
+                    "text": "Female",
+                    "value": "female"
+                },
+                {
+                    "key": "o",
+                    "text": "Other",
+                    "value": "other"
+                }
+            ]
+        },
+        validation: {
+            required: true
+        },
     },
     "age": {
-        "type": "number",
-        "name": "age",
-        "label": "Age",
-        "placeholder": "Enter age...",
-        "required": true,
-        "min": 0
+        props: {
+            "type": "number",
+            "name": "age",
+            "label": "Age",
+            "placeholder": "Enter age...",
+            "min": 0,
+            "defaultValue": 0
+
+        },
+        validation: {
+            required: true
+        },
     },
     "referredBy": {
-        "type": "text",
-        "name": "referredBy",
-        "label": "Referred By",
-        "placeholder": "Enter referred by...",
-        "required": true
+        props: {
+            "type": "text",
+            "name": "referredBy",
+            "label": "Referred By",
+            "placeholder": "Enter referred by...",
+            "defaultValue": ""
+        },
+        validation: {
+            required: true
+        },
     }
 }
 
-export default details;
+export default detailsSpec;

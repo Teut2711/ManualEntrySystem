@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Icon, Button, Form, Message, Modal, Input, Select } from "semantic-ui-react";
 import { Context } from "../App";
 import { useFormContext } from "react-hook-form";
@@ -6,44 +6,25 @@ import { TestContext } from "./Main";
 
 
 const PatientDetails = () => {
-  const { reset, register, handleInputChange, setFormStore, setValue } = useFormContext();
+  const { getValues, register, handleInputChange } = useFormContext();
   const { appState } = useContext(Context);
-
-
-  useEffect(() => {
-    for (const key in appState.patient.details) {
-      const name = "patient." + appState.patient.details[key].name;
-
-      register(name, { required: true });
-      setFormStore(state => {
-        let newState = { ...state };
-
-        if (!(name in newState)) {
-          newState[name] = "";
-          setValue(name, "")
-          reset({ [name]: "" });
-        }
-        return newState;
-      })
-    }
-  }, [appState.patient.details, register, setFormStore, setValue, reset]);
-
-
   return <>
     {
-      Object.values(appState.patient.details).map((props, index) => {
-        let fieldProps = { ...props, name: `patient.${props.name}` };
+      Object.values(appState.patient.detailsSpec).map((fieldDescription, index) => {
+
+        let fieldProps = { ...fieldDescription.props, name: `patient.${fieldDescription.props.name}` };
         fieldProps.id = fieldProps.name;
-
-
+        fieldProps.defaultValue = getValues(fieldProps.name) || fieldDescription.props.defaultValue || "";
 
         return (
           <Form.Group key={index.toString()} widths="equal">
             <Form.Field
               fluid
-              control={getControl(props.type)}
+              control={getControl(fieldDescription.props.type)}
+              {...register(fieldProps.name, { ...fieldDescription.validation })}
               {...fieldProps}
               onChange={handleInputChange}
+
             />
           </Form.Group>
         );
@@ -58,25 +39,25 @@ export default PatientDetails;
 
 
 
-export const TestDetails = () => {
-  const { handleInputChange } = useFormContext();
+export const TestDetails = ({ isModal = false, testID }) => {
+  const { getValues, handleInputChange, register } = useFormContext();
   const { appState } = useContext(Context);
-  const { counter } = useContext(TestContext)
 
   return <>
     {
-      Object.values(appState.patient.tests).map((props, index) => {
-        const fieldProps = {
-          ...props,
-          name: `patient.tests.${counter}.${props.name}`,
-        };
+      Object.values(appState.patient.testSpec).map((fieldDescription, index) => {
+        let fieldProps = { ...fieldDescription, name: `patient.tests.${testID}.${fieldDescription.name}` };
+        fieldProps.id = fieldProps.name;
+        if (!isModal)
+          fieldProps.defaultValue = getValues(fieldProps.name) || fieldDescription.props.defaultValue || "";
 
         return (
-          <Form.Group key={index.toString()} widths="equal">
+          <Form.Group key={index} widths="equal">
             <Form.Field
               fluid
-              control={getControl(props.type)}
+              control={getControl(fieldDescription.props.type)}
               {...fieldProps}
+              {...register(fieldProps.name, { ...fieldDescription.validation })}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -89,21 +70,17 @@ export const TestDetails = () => {
 
 export const AddTestButton = () => {
 
-  const { unregister, getValues, register, setValue, formStore, setFormStore } = useFormContext();
+  const { unregister, getValues } = useFormContext();
   const { counter, setCounter, setTestList } = useContext(TestContext)
   const [open, setOpen] = useState(false);
-  const { appState } = useContext(Context);
 
+  const testID = `test${counter}`;
 
   const handleTestAdditionAccept = () => {
     setTestList(state => {
-      let newItem = {
-        [counter]: {
-          text: getValues(`patient.tests.${counter}.name`, "value"),
-        }
-
+      const newState = {
+        ...state, [testID]: { text: getValues(`patient.tests.${testID}.name`) }
       }
-      const newState = { ...state, ...newItem }
 
       setCounter(state => state + 1);
       setOpen(false);
@@ -115,34 +92,16 @@ export const AddTestButton = () => {
   }
 
 
-  const handleTestAddition = () => {
-
-
-    for (const key in appState.patient.tests) {
-      const name = `patient.tests.${counter}.${appState.patient.tests[key].name}`
-      register(name, { required: true });
-
-      setFormStore(state => {
-        let newState = { ...state };
-
-        if (!(name in newState)) {
-          newState[name] = "";
-          setValue(name, "")
-        }
-        return newState;
-      })
-    }
-  }
-
   const handleTestAdditionCancel = () => {
-    unregister(`patient.tests.${counter}`);
+    unregister(`patient.tests.${testID}`);
     setOpen(false);
   }
+
 
   return <Modal onOpen={() => setOpen(true)}
     open={open}
     trigger={
-      <Button positive onClick={handleTestAddition}>
+      <Button positive >
         Add Test
         <span>
           <Icon name="plus circle" />
@@ -157,7 +116,7 @@ export const AddTestButton = () => {
       />
     </Modal.Header>
     <Modal.Content>
-      <TestDetails />
+      <TestDetails isModal={true} testID={testID} />
     </Modal.Content>
     <Modal.Actions>
       <Button

@@ -1,62 +1,85 @@
-const testTemplate = {
+const testSpec = {
     "name": {
-        "type": "text",
-        "name": "name",
-        "label": "Name",
-        "placeholder": "Enter name...",
-        "required": true
+        props: {
+            "type": "text",
+            "name": "name",
+            "label": "Name",
+            "placeholder": "Enter name...",
+
+        },
+        validation: {
+            "required": true
+        }
     },
     "observationTime": {
-        "type": "time",
-        "name": "observationTime",
-        "label": "Observation Time",
-        "placeholder": "Enter observation time...",
-        "required": true
+        props: {
+            "type": "time",
+            "name": "observationTime",
+            "label": "Observation Time",
+            "placeholder": "Enter observation time...",
 
+        },
+        validation: {
+            "required": true
+        }
     },
     "value": {
-        "type": "text",
-        "name": "value",
-        "label": "Value",
-        "placeholder": "Enter value...",
-        "required": true
+        props: {
+            "type": "text",
+            "name": "value",
+            "label": "Value",
+            "placeholder": "Enter value...",
+        },
+        validation: {
+            "required": true
+        }
     },
     "unit": {
-        "type": "select",
-        "name": "unit",
-        "label": "Unit",
-        "placeholder": "Enter unit...",
-        "required": true,
-        "options": [
-            {
-                "key": "0",
-                "text": "mg/L",
-                "value": "mgL"
-            }
-            ,
-            {
-                "key": "1",
-                "text": "kg/L",
-                "value": "kgL"
-            }
-        ]
+        props: {
+            "type": "select",
+            "name": "unit",
+            "label": "Unit",
+            "placeholder": "Enter unit...",
+            "options": [
+                {
+                    "key": "0",
+                    "text": "mg/L",
+                    "value": "mgL"
+                },
+                {
+                    "key": "1",
+                    "text": "kg/L",
+                    "value": "kgL"
+                }
+            ]
+        },
+        validation: {
+            "required": true
+        }
     },
     "method": {
-        "type": "text",
-        "name": "method",
-        "label": "Method",
-        "placeholder": "Enter method...",
-        "required": true
+        props: {
+            "type": "text",
+            "name": "method",
+            "label": "Method",
+            "placeholder": "Enter method...",
+        },
+        validation: {
+            "required": true
+        }
     },
     "impression": {
-        "type": "text",
-        "name": "impression",
-        "label": "Impression",
-        "placeholder": "Enter impression...",
-        "required": true
-
+        props: {
+            "type": "text",
+            "name": "impression",
+            "label": "Impression",
+            "placeholder": "Enter impression...",
+        },
+        validation: {
+            "required": true
+        }
     }
 }
 
 
-export default testTemplate;
+export default testSpec;

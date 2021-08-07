@@ -3,9 +3,9 @@ import "./App.css";
 import NavBar from "./components/NavBar";
 import Main from "./components/Main";
 import { createContext, useState } from "react";
-import {  Grid } from 'semantic-ui-react';
-import details from "./patientDetails"
-import testTemplate from "./patientTests";
+import { Grid } from 'semantic-ui-react';
+import detailsSpec from "./patientDetails"
+import testSpec from "./patientTests";
 export const Context = createContext();
 
 
@@ -22,12 +22,11 @@ function App() {
   const [formview, setFormView] = useState({ name: "profile", index: null });
   const [appState, setAppState] = useState({
     patient: {
-      details: details,
-      tests: testTemplate
+      detailsSpec,
+      testSpec
     },
   }
   );
-
 
   return (
     <Context.Provider value={{ appState, setAppState, patientPackages, setPatientPackages, formview, setFormView }}>
