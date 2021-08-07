@@ -5,32 +5,44 @@ import { useFormContext } from "react-hook-form";
 import { TestContext } from "./Main";
 
 
-const PatientDetails = () => {
+const useGetFields = (fieldSpec, modifyName) => {
   const { getValues, register, handleInputChange } = useFormContext();
+
+  const getFieldProps = (props) => {
+    let fieldProps = { ...props, name: modifyName(props.name) };
+    fieldProps.id = fieldProps.name;
+    fieldProps.defaultValue = getValues(fieldProps.name) || props.defaultValue || "";
+
+    return fieldProps;
+  }
+
+
+
+  return Object.values(fieldSpec).map(({ props, validation }, index) => {
+    let fieldProps = getFieldProps(props);
+
+    return (
+      <Form.Group key={index.toString()} widths="equal">
+        <Form.Field
+          fluid
+          control={getControl(fieldProps.type)}
+          {...register(fieldProps.name, { ...validation })}
+          {...fieldProps}
+          onChange={handleInputChange}
+        />
+      </Form.Group>
+    );
+  })
+}
+
+
+
+
+const PatientDetails = () => {
   const { appState } = useContext(Context);
-  return <>
-    {
-      Object.values(appState.patient.detailsSpec).map(({ props, validation }, index) => {
-
-        let fieldProps = { ...props, name: `patient.${props.name}` };
-        fieldProps.id = fieldProps.name;
-        fieldProps.defaultValue = getValues(fieldProps.name) || props.defaultValue || "";
-
-        return (
-          <Form.Group key={index.toString()} widths="equal">
-            <Form.Field
-              fluid
-              control={getControl(fieldProps.type)}
-              {...register(fieldProps.name, { ...validation })}
-              {...fieldProps}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-        );
-      })}
-
-  </>
-
+  return useGetFields(
+    appState.patient.detailsSpec,
+    name => `patient.${name}`)
 
 }
 export default PatientDetails;
@@ -44,11 +56,10 @@ export const TestDetails = ({ isModal = false, testID }) => {
 
   return <>
     {
-      
+
       Object.values(appState.patient.testSpec).map(({ props, validation }, index) => {
         let fieldProps = { ...props, name: `patient.tests.${testID}.${props.name}` };
         fieldProps.id = fieldProps.name;
-        console.log(fieldProps);
 
         if (!isModal)
           fieldProps.defaultValue = getValues(fieldProps.name) || fieldProps.defaultValue || "";
@@ -85,7 +96,7 @@ export const AddTestButton = () => {
       const newState = {
         ...state, [testID]: { text: getValues(`patient.tests.${testID}.name`) }
       }
-      
+
       console.log(newState, testID)
 
       setCounter(state => state + 1);
