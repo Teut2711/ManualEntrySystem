@@ -3,10 +3,10 @@ import { Icon, Button, Form, Message, Modal, Input, Select } from "semantic-ui-r
 import { Context } from "../App";
 import { useFormContext } from "react-hook-form";
 import { TestContext } from "./Main";
-
+import _ from "lodash";
 
 const useGetFields = (fieldSpec, modifyName) => {
-  const { getValues, register, handleInputChange } = useFormContext();
+  const { getValues, register, formState: { errors }, handleInputChange } = useFormContext();
 
   const getFieldProps = (props) => {
     let fieldProps = { ...props, name: modifyName(props.name) };
@@ -18,7 +18,7 @@ const useGetFields = (fieldSpec, modifyName) => {
 
   return Object.values(fieldSpec).map(({ props, validation }, index) => {
     let fieldProps = getFieldProps(props);
-
+    const errorMessage = _.get(errors, fieldProps.name)?.message;
     return (
       <Form.Group key={index.toString()} widths="equal">
         <Form.Field
@@ -28,6 +28,9 @@ const useGetFields = (fieldSpec, modifyName) => {
           {...fieldProps}
           onChange={handleInputChange}
         />
+        {errorMessage &&
+          <p style={ {color:"red"}}>{errorMessage}</p>
+        }
       </Form.Group>
     );
   })
@@ -47,8 +50,6 @@ const PatientDetails = () => {
 export default PatientDetails;
 
 
-
-
 export const TestDetails = ({ testID }) => {
   const { appState } = useContext(Context);
   return useGetFields(appState.patient.testSpec, name => `patient.tests.${testID}.${name}`)
@@ -56,9 +57,9 @@ export const TestDetails = ({ testID }) => {
 
 }
 
-export const AddTestButton = () => {
 
-  const { unregister, getValues } = useFormContext();
+export const AddTestButton = () => {
+  const { setError, unregister, getValues } = useFormContext();
   const { counter, setCounter, setTestList } = useContext(TestContext)
   const [open, setOpen] = useState(false);
 
@@ -69,14 +70,24 @@ export const AddTestButton = () => {
 
     setTestList(state => {
 
-      const newState = {
+      let newlyAddedTestName = getValues(`patient.tests.${testID}.name`);
+      if (Object.values(getValues("patient.tests")).map(ele => ele.name).slice(0, -1).includes(newlyAddedTestName)) {
+
+        setError(
+          `patient.tests.${testID}.name`,
+          { type: "TEST_ALREADY_EXISTS", message: "Test with this name already exists" },
+          { shouldFocus: true }
+        )
+
+        return state;
+      }
+      let newState = {
         ...state, [testID]: { text: getValues(`patient.tests.${testID}.name`) }
       }
 
 
       setCounter(state => state + 1);
       setOpen(false);
-      console.log(getValues("patient.tests"));
       return newState;
 
     })
@@ -93,7 +104,7 @@ export const AddTestButton = () => {
   return <Modal onOpen={() => setOpen(true)}
     open={open}
     trigger={
-      <Button positive >
+      <Button positive type="button">
         Add Test
         <span>
           <Icon name="plus circle" />
@@ -114,6 +125,7 @@ export const AddTestButton = () => {
       <Button
         key={0}
         color="green"
+        type="button"
         onClick={handleTestAdditionAccept}
       >
         OK
@@ -121,6 +133,7 @@ export const AddTestButton = () => {
       <Button
         key={1}
         color="black"
+        type="button"
         onClick={handleTestAdditionCancel}
       >
         Cancel

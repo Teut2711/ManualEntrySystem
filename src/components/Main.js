@@ -33,7 +33,6 @@ const Main = () => {
 
   const handleTabChange = (e, { activeIndex }) => {
     setCurrentTabIndex(activeIndex)
-    console.log(activeIndex)
   }
 
   const details = {
@@ -47,7 +46,7 @@ const Main = () => {
       />
       <PatientDetails />
       <AddTestButton />
-      <Button color="violet">Submit</Button>
+      <Button color="violet" type="submit">Submit</Button>
     </Tab.Pane>
   }
 
@@ -64,8 +63,8 @@ const Main = () => {
         />
         <TestDetails testID={testID} />
         <AddTestButton />
-        <Button color="red" onClick={event => handleTestDeletion(event, testID)}>Remove test</Button>
-        <Button color="violet">Submit</Button>
+        <Button color="red" type="button" onClick={event => handleTestDeletion(event, testID)}>Remove test</Button>
+        <Button color="violet" type="submit" >Submit</Button>
       </Tab.Pane>
     }
   })
@@ -77,10 +76,12 @@ const Main = () => {
     <Grid.Column width={16}>
       <FormProvider {...{ ...methods, handleInputChange }}  >
         <TestContext.Provider value={{ counter, setCounter, testList, setTestList }} >
-          <Form className="attached fluid segment" method="post" action={"http://localhost:8000"} onSubmit={e => e.preventDefault()}>
+          <Form className="attached fluid segment"
+            method="post"
+            action={"http://localhost:8000"}
+          >
             <Tab menu={{ fluid: true, vertical: true, tabular: true }}
               panes={menuItems}
-              defaultActiveIndex={0}
               activeIndex={currentTabIndex}
               onTabChange={handleTabChange} />
           </Form>
