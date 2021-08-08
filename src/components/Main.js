@@ -2,7 +2,7 @@ import PatientDetails, { TestDetails } from "./FormComponents";
 import { Grid } from 'semantic-ui-react';
 import { useState, createContext } from 'react';
 import { Tab } from 'semantic-ui-react'
-import { Button, Form, Message } from "semantic-ui-react";
+import { Header, Button, Form, Message } from "semantic-ui-react";
 import { useForm, FormProvider } from "react-hook-form";
 import { AddTestButton } from "./FormComponents";
 
@@ -13,7 +13,7 @@ const Main = () => {
   const [testList, setTestList] = useState({});
   const methods = useForm({ shouldUnregister: false });
   const [counter, setCounter] = useState(0);
-  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+  const [currentTabIndex, setCurrentTabIndex] = useState(1);
 
   const handleInputChange = (e, { name, value }) => {
     methods.setValue(name, value);
@@ -36,13 +36,12 @@ const Main = () => {
   }
 
   const details = {
-    menuItem: 'Patient Profile',
-    render: () => <Tab.Pane key={ "Patient Profile"}>
+    menuItem: { content: 'Details', color: "violet" },
+    render: () => <Tab.Pane key={"Patient Profile"}>
       <Message
         attached
         header="Patient Details"
         content="Fill out the patient details."
-
       />
       <PatientDetails />
       <AddTestButton />
@@ -54,7 +53,8 @@ const Main = () => {
   const allTests = Object.keys(testList).map(testID => {
 
     return {
-      menuItem: testList[testID].text,
+      menuItem: { content: testList[testID].text, color: "violet" },
+
       render: () => <Tab.Pane key={testList[testID].text}>
         <Message
           attached
@@ -70,7 +70,22 @@ const Main = () => {
   })
 
 
-  const menuItems = [details, ...allTests]
+  const menuItems = [
+    {
+      menuItem: {
+        header: true, content: <Header as="h3">Patient Profile</Header>, active: false,
+        disabled: true,
+
+      }
+    },
+    details,
+    {
+      menuItem: {
+        header: true, content: <Header as="h3">Tests</Header>, active: false,
+        disabled: true
+      }
+    },
+    ...allTests]
 
   return (
     <Grid.Column width={16}>
@@ -84,6 +99,7 @@ const Main = () => {
               panes={menuItems}
               activeIndex={currentTabIndex}
               onTabChange={handleTabChange} />
+
           </Form>
         </TestContext.Provider>
       </FormProvider>
