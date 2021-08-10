@@ -29,7 +29,7 @@ export const AddTestButton = () => {
                 return state;
             }
             let newState = {
-                ...state, [testID]: { text: getValues(`patient.tests.${testID}.name`) }
+                ...state, [testID]: { text: getValues(`patient.tests.${testID}.name`) , index: counter }
             }
             setCounter(state => state + 1);
             setOpen(false);

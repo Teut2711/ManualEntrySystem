@@ -10,6 +10,10 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.4.13",
+    "@types/react": "^17.0.16",
+    "@types/react-dom": "^17.0.9",
     "formik": "^2.2.9",
     "formik-semantic-ui-react": "^2.0.0",
     "fs": "0.0.1-security",
@@ -21,6 +25,7 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3",
     "styled-components": "^5.3.0",
+    "typescript": "^4.3.5",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

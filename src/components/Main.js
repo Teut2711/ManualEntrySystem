@@ -3,10 +3,10 @@ import { useState, createContext } from "react";
 import { Tab } from "semantic-ui-react";
 import { Form } from "semantic-ui-react";
 import { useForm, FormProvider} from "react-hook-form";
-import { ProfileMenu, TestsMenu} from "./SideBar"
+import { getProfileMenu, getTestMenu} from "./SideBar"
 
-export const TestContext = createContext();
-export const TabContext = createContext();
+export const TestContext = createContext({});
+export const TabContext = createContext({});
 
 const Main = () => {
   const [testList, setTestList] = useState({});
@@ -17,7 +17,19 @@ const Main = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(1);
 
 
-  const menuItems = [...ProfileMenu, ...TestsMenu];
+  
+  const handleTestDeletion = (e, testID)=> {
+    const filterDict = (dict, filterFunc) =>
+      Object.fromEntries(Object.entries(dict).filter(filterFunc));
+      
+    setTestList((state) => filterDict(state, ([key, val]) => key !== testID));
+    
+    methods.unregister(`patient.tests.${testID}`);
+    setCurrentTabIndex(0);
+  };
+  
+  const menuItems = [...getProfileMenu(), ...getTestMenu(testList, handleTestDeletion)];
+
 
   return (
     <Grid.Column width={16}>

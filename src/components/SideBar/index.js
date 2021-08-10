@@ -1,4 +1,4 @@
-import ProfileMenu from "./ProfileMenu";
-import TestsMenu from "./TestsMenu";
+import getProfileMenu from "./ProfileMenu";
+import getTestMenu from "./TestsMenu";
 
-export {ProfileMenu, TestsMenu};
+export {getProfileMenu, getTestMenu};

@@ -7,8 +7,8 @@ import {
     useContext,
     useEffect,
 } from "react";
-import { TabContext } from "../Main"
-import ProfileMenu from "./ProfileMenu"
+import { TestContext, TabContext } from "../Main"
+import getProfileMenu from "./ProfileMenu";
 
 const initialState = {
     loading: false,
@@ -32,12 +32,12 @@ const exampleReducer = (state, action) => {
     }
 }
 
-const TestSearch = ({ testList }) => {
+const TestSearch = () => {
     const [state, dispatch] = useReducer(exampleReducer, initialState);
     const { loading, results, value } = state;
     const timeoutRef = useRef();
     const { setCurrentTabIndex } = useContext(TabContext)
-
+    const { testList } = useContext(TestContext)
     const handleSearchChange = useCallback(
         (e, data) => {
             clearTimeout(timeoutRef.current);
@@ -67,33 +67,31 @@ const TestSearch = ({ testList }) => {
         };
     }, []);
 
+    const sortedTestList = Object.fromEntries(
+        Object
+            .values(testList)
+            .sort((a, b) => a.counter - b.counter)
+            .map((el, index) => [el.text, index]))
 
     const resultRenderer = ({ text }) => {
         return <Label
             content={text}
-            onClick={() => {
-                console.log("Clicked");
-                setCurrentTabIndex(() => {
-                    let key;
-                    console.log(_.sortBy(Object.keys(testList), [(o) => parseInt(o.slice(4))]))
-                    _.sortBy(Object.keys(testList), [
-                        (o) => parseInt(o.slice(4)),
-                    ]).forEach((ele, index) => {
-                        if (testList[ele] === text) key = index;
-                    });
-                    return key + ProfileMenu.length;
-                });
-            }}
+            onClick={
+                () => {
+                    setCurrentTabIndex(sortedTestList[text] + getProfileMenu().length + 1)
+                }
+            }
         />
     };
 
     return <Search
         loading={loading}
-        onResultSelect={(e, data) =>
+        onResultSelect={(e, data) => {
             dispatch({
                 type: "UPDATE_SELECTION",
                 selection: data.result.title,
             })
+        }
         }
         onSearchChange={handleSearchChange}
         resultRenderer={resultRenderer}
