@@ -1,3 +1,4 @@
+build/
 
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,git,node,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,git,node,react
@@ -6,7 +7,6 @@
 # Created by git for backups. To disable backups in Git:
 # $ git config --global mergetool.keepBackup false
 *.orig
-
 # Created by git when using merge tools for conflicts
 *.BACKUP.*
 *.BASE.*
